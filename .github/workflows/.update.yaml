@@ -1,0 +1,109 @@
+name: Update Libs
+
+on:
+  #schedule:
+  #  - cron: '42 2 * * *'
+  push:
+    branches:
+      - master
+
+jobs:
+  AutoLinux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.14
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # otherwise, push refs to dest repo will fail
+
+      - name: Do Build
+        run: build/linux.sh
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: go-libtor-linux
+          path: /tmp/go-libtor.tar
+          if-no-files-found: error
+  AutoDarwin:
+    runs-on: macos-latest
+    needs: AutoLinux
+    env:
+      OUTDIR: ${{ github.workspace }}
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.14
+        id: go
+
+      - name: Download the last build
+        uses: actions/download-artifact@v2
+        with:
+          name: go-libtor-linux
+          path: .
+
+      - name: Run Script
+        run: tar xf go-libtor.tar && rm go-libtor.tar && cd go-libtor && build/darwin.sh
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: go-libtor-darwin
+          # Can't place it to /tmp/, for unkown reasons he don't want to upload it.
+          path: ${{ github.workspace }}/go-libtor.tar
+          if-no-files-found: error
+  TestLinux:
+    runs-on: ubuntu-latest
+    needs: AutoDarwin
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.14
+        id: go
+
+      - name: Download the last build
+        uses: actions/download-artifact@v2
+        with:
+          name: go-libtor-darwin
+          path: .
+
+      - name: Run Script
+        run: tar xf go-libtor.tar && cd go-libtor && go build .
+  TestDarwin:
+    runs-on: macos-latest
+    needs: AutoDarwin
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.14
+        id: go
+
+      - name: Download the last build
+        uses: actions/download-artifact@v2
+        with:
+          name: go-libtor-darwin
+          path: .
+
+      - name: Run Script
+        run: tar xf go-libtor.tar && cd go-libtor && go build .
+  Push:
+    runs-on: ubuntu-latest
+    needs: [ TestLinux, TestDarwin ]
+    env:
+      ED25519_KEY: ${{secrets.ED25519_KEY}}
+    steps:
+      - name: Download the last build
+        uses: actions/download-artifact@v2
+        with:
+          name: go-libtor-darwin
+          path: .
+
+      - name: Run Script
+        run: tar xf go-libtor.tar && cd go-libtor && build/push.sh
