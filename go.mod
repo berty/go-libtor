@@ -1,6 +1,6 @@
-module github.com/ipsn/go-libtor
+module berty.tech/go-libtor
 
-go 1.12
+go 1.13
 
 require (
 	github.com/cretz/bine v0.1.0

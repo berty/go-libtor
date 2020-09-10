@@ -1,27 +1,32 @@
 # go-libtor - Self-contained Tor from Go
 
-[![GoDoc](https://godoc.org/github.com/ipsn/go-libtor?status.svg)](https://godoc.org/github.com/ipsn/go-libtor) [![Travis](https://travis-ci.org/ipsn/go-libtor.svg?branch=master)](https://travis-ci.org/ipsn/go-libtor)
+[![PkgGoDev](https://pkg.go.dev/badge/berty.tech/go-libtor)](https://pkg.go.dev/berty.tech/go-libtor)
 
 The `go-libtor` project is a self-contained, fully statically linked Tor library for Go. It consists of an elaborate suite of Go/CGO wrappers around the original C/C++ Tor library and its dependencies ([zlib](https://github.com/madler/zlib), [libevent](https://github.com/libevent/libevent) and [openssl](https://github.com/openssl/openssl)).
 
 | Library  | Version | Commit |
 |:--------:|:-------:|:------:|
-| zlib     | {{.zlibVer}}     | [`{{.zlibHash}}`](https://github.com/madler/zlib/commit/{{.zlibHash}})               |
+| zlib | {{.zlibVer}} | [`{{.zlibHash}}`](https://github.com/madler/zlib/commit/{{.zlibHash}}) |
 | libevent | {{.libeventVer}} | [`{{.libeventHash}}`](https://github.com/libevent/libevent/commit/{{.libeventHash}}) |
-| openssl  | {{.opensslVer}}  | [`{{.opensslHash}}`](https://github.com/openssl/openssl/commit/{{.opensslHash}})     |
-| tor      | {{.torVer}}      | [`{{.torHash}}`](https://gitweb.torproject.org/tor.git/commit/?id={{.torHash}})      |
+| openssl | {{.opensslVer}} | [`{{.opensslHash}}`](https://github.com/openssl/openssl/commit/{{.opensslHash}}) |
+| tor | {{.torVer}} | [`{{.torHash}}`](https://gitweb.torproject.org/tor.git/commit/?id={{.torHash}}) |
 
 The library is currently supported on:
 
- - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl`.
- - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile`.
+ - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
+ - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
+ - Macos `amd64`.
+
+## Installation (Go modules)
+
+This library is compatible with Go modules. All you should need is to import `berty.tech/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
 
 ## Installation (GOPATH)
 
 The goal of this library is to be a self-contained Tor package for Go. As such, it plays nice with the usual `go get` workflow. That said, building Tor and all its dependencies locally can take quite a while, so it's recommended to run `go get` in verbose mode.
 
 ```
-$ go get -u -v -x github.com/ipsn/go-libtor
+$ go get -u -v -x berty.tech/go-libtor
 ```
 
 You'll also need the [`bine`](https://github.com/cretz/bine) bindings to interface with the library:
@@ -30,9 +35,7 @@ You'll also need the [`bine`](https://github.com/cretz/bine) bindings to interfa
 go get -u github.com/cretz/bine/tor
 ```
 
-## Installation (Go modules)
-
-This library is compatible with Go modules. All you should need is to import `github.com/ipsn/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
+How ever to ensure a build consistency across all users of your project we recomand you using **go mod**.
 
 ## Usage
 
@@ -52,7 +55,7 @@ import (
 	"time"
 
 	"github.com/cretz/bine/tor"
-	"github.com/ipsn/go-libtor"
+	"berty.tech/go-libtor"
 )
 
 func main() {
@@ -125,7 +128,7 @@ import (
 	"time"
 
 	"github.com/cretz/bine/tor"
-	"github.com/ipsn/go-libtor"
+	"berty.tech/go-libtor"
 )
 
 // Run starts up an embedded Tor process, starts a hidden onion service on a new
@@ -186,13 +189,15 @@ Archive:  demo.aar
 
 Explaining how to load an `.aar` into an Android project is beyond the scope of this article, but you can load the archive with Android Studio as a module and edit your Gradle build config to add it as a dependency. An overly crude app would just start the server and drop the onion URL into an Android label:
 
-![Android](https://raw.githubusercontent.com/ipsn/go-libtor/master/demo.jpg)
+![Android](https://raw.githubusercontent.com/berty/go-libtor/master/demo.jpg)
 
 That's actually it! We've managed to get a Tor hidden service running from an Android phone and access it from another device through the Tor network, all through 40 lines of Go- and 3 lines of Java code.
 
 ## Credits
 
-This repository is maintained by Péter Szilágyi ([@karalabe](https://github.com/karalabe)), but authorship of all code contained inside belongs to the individual upstream projects.
+This repository is a fork of [ipsn/go-libtor](https://github.com/ipsn/go-libtor) originaly maintained by Péter Szilágyi ([@karalabe](https://github.com/karalabe)), but authorship of all code contained inside belongs to the individual upstream projects.
+
+We ([berty](https://berty.tech/)) have forked it because we are in crucial need of the new improvement we made (Mac OS support), but we are still hopefull about merging it back in [ipsn/go-libtor](https://github.com/ipsn/go-libtor).
 
 ## License
 
