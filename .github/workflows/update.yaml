@@ -1,11 +1,8 @@
 name: Update Libs
 
 on:
-  #schedule:
-  #  - cron: '42 2 * * *'
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '42 2 * * *'
 
 jobs:
   AutoLinux:
@@ -42,7 +39,7 @@ jobs:
           go-version: ^1.14
         id: go
 
-      - name: Download the last build
+      - name: Download the previous build
         uses: actions/download-artifact@v2
         with:
           name: go-libtor-linux
