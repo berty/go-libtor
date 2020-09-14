@@ -6,15 +6,15 @@ The `go-libtor` project is a self-contained, fully statically linked Tor library
 
 | Library  | Version | Commit |
 |:--------:|:-------:|:------:|
-| zlib     | {{.zlibVer}}     | [`{{.zlibHash}}`](https://github.com/madler/zlib/commit/{{.zlibHash}})               |
-| libevent | {{.libeventVer}} | [`{{.libeventHash}}`](https://github.com/libevent/libevent/commit/{{.libeventHash}}) |
-| openssl  | {{.opensslVer}}  | [`{{.opensslHash}}`](https://github.com/openssl/openssl/commit/{{.opensslHash}})     |
-| tor      | {{.torVer}}      | [`{{.torHash}}`](https://gitweb.torproject.org/tor.git/commit/?id={{.torHash}})      |
+| zlib | 1.2.11 | [`cacf7f1d4e3d44d871b605da3b647f07d718623f`](https://github.com/madler/zlib/commit/cacf7f1d4e3d44d871b605da3b647f07d718623f) |
+| libevent | 2.2.0-alpha-dev | [`a18301a2bb160ff7c3ffaf5b7653c39ffe27b385`](https://github.com/libevent/libevent/commit/a18301a2bb160ff7c3ffaf5b7653c39ffe27b385) |
+| openssl | 1.1.1-stable | [`8380f453ec81d9172b94a82c3592f78f1a612046`](https://github.com/openssl/openssl/commit/8380f453ec81d9172b94a82c3592f78f1a612046) |
+| tor | 0.3.5.11-dev | [`ee72c517b2cce9df02000c7c456cea07e3d2f158`](https://gitweb.torproject.org/tor.git/commit/?id=ee72c517b2cce9df02000c7c456cea07e3d2f158) |
 
 The library is currently supported on:
 
- - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc`.
- - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile`.
+ - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
+ - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
  - Macos `amd64`.
 
 ## Installation (Go modules)
