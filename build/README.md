@@ -106,7 +106,7 @@ Waiting for publication
 Please open a Tor capable browser and navigate to http://s7t3iy76h54cjacg.onion
 ```
 
-![Demo](https://raw.githubusercontent.com/ipsn/go-libtor/master/demo.png)
+![Demo](https://raw.githubusercontent.com/berty/go-libtor/master/demo.png)
 
 Well, that was easy. With a few lines of Go code we've created a hidden TCP service inside the Tor network. The browser used to test the server with above was [Brave](https://brave.com/), which among others has built in experimental support for Tor.
 
