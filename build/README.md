@@ -1,6 +1,6 @@
 # go-libtor - Self-contained Tor from Go
 
-[![PkgGoDev](https://pkg.go.dev/badge/berty.tech/go-libtor)](https://pkg.go.dev/berty.tech/go-libtor)
+[![PkgGoDev](https://pkg.go.dev/badge/berty.tech/go-libtor)](https://pkg.go.dev/berty.tech/go-libtor)[![Update Libs](https://github.com/berty/go-libtor/workflows/Update%20Libs/badge.svg)](https://github.com/berty/go-libtor/actions?query=workflow%3AUpdate+Libs)
 
 The `go-libtor` project is a self-contained, fully statically linked Tor library for Go. It consists of an elaborate suite of Go/CGO wrappers around the original C/C++ Tor library and its dependencies ([zlib](https://github.com/madler/zlib), [libevent](https://github.com/libevent/libevent) and [openssl](https://github.com/openssl/openssl)).
 
