@@ -411,7 +411,7 @@ func wrapLibevent(tgt string, lock *lockJson) (string, string, error) {
 	ioutil.WriteFile(filepath.Join("libtor", tgt+"_libevent_preamble.go"), buff.Bytes(), 0644)
 
 	// Inject the configuration headers and ensure everything builds
-	os.MkdirAll(filepath.Join(tgt, "libevent_config", "event2"), 0755)
+	os.MkdirAll(filepath.Join("libevent_config", "event2"), 0755)
 
 	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".darwin64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "libevent", fmt.Sprintf("event-config%s.h", arch)))
@@ -423,7 +423,7 @@ func wrapLibevent(tgt string, lock *lockJson) (string, string, error) {
 		if err := tmpl.Execute(buff, struct{ NumVer, StrVer string }{string(numver), string(strver)}); err != nil {
 			return "", "", err
 		}
-		ioutil.WriteFile(filepath.Join(tgt, "libevent_config", "event2", fmt.Sprintf("event-config%s.h", arch)), buff.Bytes(), 0644)
+		ioutil.WriteFile(filepath.Join("libevent_config", "event2", fmt.Sprintf("event-config%s.h", arch)), buff.Bytes(), 0644)
 	}
 	return string(strver), string(commit), nil
 }
@@ -436,7 +436,7 @@ var libeventPreamble = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/libevent_config
+#cgo CFLAGS: -I${SRCDIR}/../libevent_config
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/libevent
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/libevent/compat
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/libevent/include
@@ -622,16 +622,16 @@ func wrapOpenSSL(tgt string, lock *lockJson) (string, string, error) {
 	ioutil.WriteFile(filepath.Join("libtor", tgt+"_openssl_preamble.go"), buff.Bytes(), 0644)
 
 	// Inject the configuration headers and ensure everything builds
-	os.MkdirAll(filepath.Join(tgt, "openssl_config", "crypto"), 0755)
+	os.MkdirAll(filepath.Join("openssl_config", "crypto"), 0755)
 
 	for _, arch := range []string{"", ".linux", ".darwin"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("dso_conf%s.h", arch)))
-		ioutil.WriteFile(filepath.Join(tgt, "openssl_config", "crypto", fmt.Sprintf("dso_conf%s.h", arch)), blob, 0644)
+		ioutil.WriteFile(filepath.Join("openssl_config", "crypto", fmt.Sprintf("dso_conf%s.h", arch)), blob, 0644)
 	}
 
 	for _, arch := range []string{"", ".x64", ".x86"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("bn_conf%s.h", arch)))
-		ioutil.WriteFile(filepath.Join(tgt, "openssl_config", "crypto", fmt.Sprintf("bn_conf%s.h", arch)), blob, 0644)
+		ioutil.WriteFile(filepath.Join("openssl_config", "crypto", fmt.Sprintf("bn_conf%s.h", arch)), blob, 0644)
 	}
 	for _, arch := range []string{"", ".x64", ".x86", ".darwin64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("buildinf%s.h", arch)))
@@ -643,13 +643,13 @@ func wrapOpenSSL(tgt string, lock *lockJson) (string, string, error) {
 		if err := tmpl.Execute(buff, struct{ Date string }{string(date)}); err != nil {
 			return "", "", err
 		}
-		ioutil.WriteFile(filepath.Join(tgt, "openssl_config", fmt.Sprintf("buildinf%s.h", arch)), buff.Bytes(), 0644)
+		ioutil.WriteFile(filepath.Join("openssl_config", fmt.Sprintf("buildinf%s.h", arch)), buff.Bytes(), 0644)
 	}
-	os.MkdirAll(filepath.Join(tgt, "openssl_config", "openssl"), 0755)
+	os.MkdirAll(filepath.Join("openssl_config", "openssl"), 0755)
 
 	for _, arch := range []string{"", ".x64", ".x86", ".darwin64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("opensslconf%s.h", arch)))
-		ioutil.WriteFile(filepath.Join(tgt, "openssl_config", "openssl", fmt.Sprintf("opensslconf%s.h", arch)), blob, 0644)
+		ioutil.WriteFile(filepath.Join("openssl_config", "openssl", fmt.Sprintf("opensslconf%s.h", arch)), blob, 0644)
 	}
 	return string(strver), string(commit), nil
 }
@@ -662,7 +662,7 @@ var opensslPreamble = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/openssl_config
+#cgo CFLAGS: -I${SRCDIR}/../openssl_config
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/openssl
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/openssl/include
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/openssl/crypto/ec/curve448
@@ -887,7 +887,7 @@ func wrapTor(tgt string, lock *lockJson) (string, string, error) {
 	ioutil.WriteFile(filepath.Join("libtor", tgt+"_tor_preamble.go"), buff.Bytes(), 0644)
 
 	// Inject the configuration headers and ensure everything builds
-	os.MkdirAll(filepath.Join(tgt, "tor_config"), 0755)
+	os.MkdirAll(filepath.Join("tor_config"), 0755)
 
 	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".darwin64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "tor", fmt.Sprintf("orconfig%s.h", arch)))
@@ -899,10 +899,10 @@ func wrapTor(tgt string, lock *lockJson) (string, string, error) {
 		if err := tmpl.Execute(buff, struct{ StrVer string }{string(strver)}); err != nil {
 			return "", "", err
 		}
-		ioutil.WriteFile(filepath.Join(tgt, "tor_config", fmt.Sprintf("orconfig%s.h", arch)), buff.Bytes(), 0644)
+		ioutil.WriteFile(filepath.Join("tor_config", fmt.Sprintf("orconfig%s.h", arch)), buff.Bytes(), 0644)
 	}
 	blob, _ = ioutil.ReadFile(filepath.Join("config", "tor", "micro-revision.i"))
-	ioutil.WriteFile(filepath.Join(tgt, "tor_config", "micro-revision.i"), blob, 0644)
+	ioutil.WriteFile(filepath.Join("tor_config", "micro-revision.i"), blob, 0644)
 	return string(strver), string(commit), nil
 }
 
@@ -914,7 +914,7 @@ var torPreamble = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/tor_config
+#cgo CFLAGS: -I${SRCDIR}/../tor_config
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/tor
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/tor/src
 #cgo CFLAGS: -I${SRCDIR}/../{{.Target}}/tor/src/core/or
