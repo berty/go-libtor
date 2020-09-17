@@ -5,7 +5,7 @@
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../linux/openssl_config
+#cgo CFLAGS: -I${SRCDIR}/../openssl_config
 #cgo CFLAGS: -I${SRCDIR}/../linux/openssl
 #cgo CFLAGS: -I${SRCDIR}/../linux/openssl/include
 #cgo CFLAGS: -I${SRCDIR}/../linux/openssl/crypto/ec/curve448

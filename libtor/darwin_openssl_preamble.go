@@ -5,7 +5,7 @@
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../darwin/openssl_config
+#cgo CFLAGS: -I${SRCDIR}/../openssl_config
 #cgo CFLAGS: -I${SRCDIR}/../darwin/openssl
 #cgo CFLAGS: -I${SRCDIR}/../darwin/openssl/include
 #cgo CFLAGS: -I${SRCDIR}/../darwin/openssl/crypto/ec/curve448

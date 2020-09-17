@@ -5,7 +5,7 @@
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../darwin/libevent_config
+#cgo CFLAGS: -I${SRCDIR}/../libevent_config
 #cgo CFLAGS: -I${SRCDIR}/../darwin/libevent
 #cgo CFLAGS: -I${SRCDIR}/../darwin/libevent/compat
 #cgo CFLAGS: -I${SRCDIR}/../darwin/libevent/include

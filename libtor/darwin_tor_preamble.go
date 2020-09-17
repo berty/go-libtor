@@ -5,7 +5,7 @@
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../darwin/tor_config
+#cgo CFLAGS: -I${SRCDIR}/../tor_config
 #cgo CFLAGS: -I${SRCDIR}/../darwin/tor
 #cgo CFLAGS: -I${SRCDIR}/../darwin/tor/src
 #cgo CFLAGS: -I${SRCDIR}/../darwin/tor/src/core/or

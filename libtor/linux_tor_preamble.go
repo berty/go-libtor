@@ -5,7 +5,7 @@
 package libtor
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/../linux/tor_config
+#cgo CFLAGS: -I${SRCDIR}/../tor_config
 #cgo CFLAGS: -I${SRCDIR}/../linux/tor
 #cgo CFLAGS: -I${SRCDIR}/../linux/tor/src
 #cgo CFLAGS: -I${SRCDIR}/../linux/tor/src/core/or
