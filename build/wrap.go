@@ -140,7 +140,7 @@ func main() {
 // targetFilters maps a build target to the builds tags to apply to it
 var targetFilters = map[string]string{
 	"linux":  "linux android",
-	"darwin": "darwin,amd64",
+	"darwin": "darwin,amd64 darwin,arm64 ios,amd64 ios,arm64",
 }
 
 // lockJson stores the commits for later reuse.
@@ -413,7 +413,7 @@ func wrapLibevent(tgt string, lock *lockJson) (string, string, error) {
 	// Inject the configuration headers and ensure everything builds
 	os.MkdirAll(filepath.Join("libevent_config", "event2"), 0755)
 
-	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".darwin64"} {
+	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".macos64", ".ios64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "libevent", fmt.Sprintf("event-config%s.h", arch)))
 		tmpl, err := template.New("").Parse(string(blob))
 		if err != nil {
@@ -633,7 +633,7 @@ func wrapOpenSSL(tgt string, lock *lockJson) (string, string, error) {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("bn_conf%s.h", arch)))
 		ioutil.WriteFile(filepath.Join("openssl_config", "crypto", fmt.Sprintf("bn_conf%s.h", arch)), blob, 0644)
 	}
-	for _, arch := range []string{"", ".x64", ".x86", ".darwin64"} {
+	for _, arch := range []string{"", ".x64", ".x86", ".macos64", ".ios64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("buildinf%s.h", arch)))
 		tmpl, err := template.New("").Parse(string(blob))
 		if err != nil {
@@ -647,7 +647,7 @@ func wrapOpenSSL(tgt string, lock *lockJson) (string, string, error) {
 	}
 	os.MkdirAll(filepath.Join("openssl_config", "openssl"), 0755)
 
-	for _, arch := range []string{"", ".x64", ".x86", ".darwin64"} {
+	for _, arch := range []string{"", ".x64", ".x86", ".macos64", ".ios64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "openssl", fmt.Sprintf("opensslconf%s.h", arch)))
 		ioutil.WriteFile(filepath.Join("openssl_config", "openssl", fmt.Sprintf("opensslconf%s.h", arch)), blob, 0644)
 	}
@@ -889,7 +889,7 @@ func wrapTor(tgt string, lock *lockJson) (string, string, error) {
 	// Inject the configuration headers and ensure everything builds
 	os.MkdirAll(filepath.Join("tor_config"), 0755)
 
-	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".darwin64"} {
+	for _, arch := range []string{"", ".linux64", ".linux32", ".android64", ".android32", ".macos64", ".ios64"} {
 		blob, _ := ioutil.ReadFile(filepath.Join("config", "tor", fmt.Sprintf("orconfig%s.h", arch)))
 		tmpl, err := template.New("").Parse(string(blob))
 		if err != nil {

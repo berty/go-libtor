@@ -6,8 +6,12 @@
   #include "orconfig.linux32.h"
 #endif
 
-#ifdef ARCH_DARWIN64
-  #include "orconfig.darwin64.h"
+#ifdef ARCH_MACOS64
+  #include "orconfig.macos64.h"
+#endif
+
+#ifdef ARCH_IOS64
+  #include "orconfig.ios64.h"
 #endif
 
 #ifdef ARCH_ANDROID64
