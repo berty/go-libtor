@@ -1,4 +1,4 @@
-#if defined(ARCH_LINUX64) || defined(ARCH_ANDROID64) || defined(ARCH_DARWIN64)
+#if defined(ARCH_LINUX64) || defined(ARCH_ANDROID64) || defined(ARCH_MACOS64) || defined(ARCH_IOS64)
   #include "crypto/bn_conf.x64.h"
 #endif
 

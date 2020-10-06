@@ -2,6 +2,6 @@
   #include "dso_conf.linux.h"
 #endif
 
-#ifdef ARCH_DARWIN64
+#if defined(ARCH_MACOS64) || defined(ARCH_IOS64)
   #include "dso_conf.darwin.h"
 #endif

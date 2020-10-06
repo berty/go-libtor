@@ -6,8 +6,12 @@
   #include "event2/event-config.linux32.h"
 #endif
 
-#ifdef ARCH_DARWIN64
-  #include "event2/event-config.darwin64.h"
+#ifdef ARCH_MACOS64
+  #include "event2/event-config.macos64.h"
+#endif
+
+#ifdef ARCH_IOS64
+  #include "event2/event-config.ios64.h"
 #endif
 
 #ifdef ARCH_ANDROID64
