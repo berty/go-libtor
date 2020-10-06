@@ -6,6 +6,10 @@
   #include "buildinf.x86.h"
 #endif
 
-#ifdef ARCH_DARWIN64
-  #include "buildinf.darwin64.h"
+#ifdef ARCH_MACOS64
+  #include "buildinf.macos64.h"
+#endif
+
+#ifdef ARCH_IOS64
+  #include "buildinf.ios64.h"
 #endif

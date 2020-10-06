@@ -11,5 +11,4 @@
 
 #ifndef HEADER_DSO_CONF_H
 # define HEADER_DSO_CONF_H
-
 #endif
