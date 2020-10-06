@@ -7,12 +7,12 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/update.yml'
+      - '.github/workflows/update.yaml'
       - 'build/**'
       - 'config/**'
   pull_request:
     paths:
-      - '.github/workflows/update.yml'
+      - '.github/workflows/update.yaml'
       - 'build/**'
       - 'config/**'
 
