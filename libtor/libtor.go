@@ -1,6 +1,3 @@
-// go-libtor - Self-contained Tor from Go
-// Copyright (c) 2018 Péter Szilágyi. All rights reserved.
-
 // Package libtor is a self-contained static tor library.
 package libtor
 
