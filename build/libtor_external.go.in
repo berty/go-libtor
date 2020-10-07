@@ -1,4 +1,3 @@
-// +build linux android darwin,amd64 darwin,arm64 ios,amd64 ios,arm64
 // Package libtor is a self-contained static tor library.
 package libtor
 
