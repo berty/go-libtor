@@ -91,38 +91,8 @@ func main() {
 	}
 
 	// Copy and fill out the libtor entrypoint wrappers and the readme template.
-	var allFilters string
-	for _, v := range targetFilters {
-		if allFilters == "" {
-			allFilters = v
-			continue
-		}
-		allFilters += " " + v
-	}
-	tmpl := template.Must(template.ParseFiles(filepath.Join("build", "libtor_external_supported.go.in")))
-	buf := new(bytes.Buffer)
-	tmpl.Execute(buf, map[string]string{
-		"TargetFilter": allFilters,
-	})
-	ioutil.WriteFile("libtor_supported.go", buf.Bytes(), 0644)
-	var excludeFilters string
-	for _, v := range strings.Split(allFilters, " ") {
-		var s string
-		for _, vv := range strings.Split(v, ",") {
-			if s == "" {
-				s = "!" + vv
-				continue
-			}
-			s += ",!" + vv
-		}
-		excludeFilters += "// +build " + s + "\n"
-	}
-	tmpl = template.Must(template.ParseFiles(filepath.Join("build", "libtor_external_unsupported.go.in")))
-	buf = new(bytes.Buffer)
-	tmpl.Execute(buf, map[string]string{
-		"TargetFilter": excludeFilters,
-	})
-	ioutil.WriteFile("libtor_unsupported.go", buf.Bytes(), 0644)
+	blob, _ = ioutil.ReadFile(filepath.Join("build", "libtor_external.go.in"))
+	ioutil.WriteFile(filepath.Join("libtor.go"), blob, 0644)
 	blob, _ = ioutil.ReadFile(filepath.Join("build", "libtor_internal.go.in"))
 	ioutil.WriteFile(filepath.Join("libtor", "libtor.go"), blob, 0644)
 
