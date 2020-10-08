@@ -15,7 +15,8 @@ The library is currently supported on:
 
  - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
  - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
- - Macos `amd64`.
+ - Macos `amd64`, `arm64`.
+ - iOS `arm64`, `amd64` (simulator).
 
 ## Installation (Go modules)
 
