@@ -251,6 +251,7 @@ func wrapZlib(tgt string, lock *lockJson) (string, string, error) {
 var zlibPreamble = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticZlib
 
 package libtor
 
@@ -266,6 +267,7 @@ import "C"
 var zlibTemplate = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticZlib
 
 package libtor
 
@@ -429,6 +431,7 @@ func wrapLibevent(tgt string, lock *lockJson) (string, string, error) {
 var libeventPreamble = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticLibevent
 
 package libtor
 
@@ -445,6 +448,7 @@ import "C"
 var libeventTemplate = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticLibevent
 
 package libtor
 
@@ -655,6 +659,7 @@ func wrapOpenSSL(tgt string, lock *lockJson) (string, string, error) {
 var opensslPreamble = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticOpenssl
 
 package libtor
 
@@ -673,6 +678,7 @@ import "C"
 var opensslTemplate = `// go-libtor - Self-contained Tor from Go
 // Copyright (c) 2018 Péter Szilágyi. All rights reserved.
 // +build {{.TargetFilter}}
+// +build staticOpenssl
 
 package libtor
 
