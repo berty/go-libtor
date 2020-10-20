@@ -8,15 +8,14 @@ The `go-libtor` project is a self-contained, fully statically linked Tor library
 |:--------:|:-------:|:------:|
 | zlib | 1.2.11 | [`cacf7f1d4e3d44d871b605da3b647f07d718623f`](https://github.com/madler/zlib/commit/cacf7f1d4e3d44d871b605da3b647f07d718623f) |
 | libevent | 2.2.0-alpha-dev | [`22872176a48b118cde2f8fea762f4368f833b9bc`](https://github.com/libevent/libevent/commit/22872176a48b118cde2f8fea762f4368f833b9bc) |
-| openssl | 1.1.1-stable | [`ed7cdb954e96d463add20f584f5e7ce99560af27`](https://github.com/openssl/openssl/commit/ed7cdb954e96d463add20f584f5e7ce99560af27) |
+| openssl | 1.1.1-stable | [`4b7595e3ecf3e31ecb93f6397300331ba36b2ca4`](https://github.com/openssl/openssl/commit/4b7595e3ecf3e31ecb93f6397300331ba36b2ca4) |
 | tor | 0.3.5.11-dev | [`58b23b33e45f1aa643e890543ecc0f43878cf038`](https://gitweb.torproject.org/tor.git/commit/?id=58b23b33e45f1aa643e890543ecc0f43878cf038) |
 
 The library is currently supported on:
 
  - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
  - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
- - Macos `amd64`, `arm64`.
- - iOS `arm64`, `amd64` (simulator).
+ - Darwin (Macos and iOS) `amd64` and `arm64`.
 
 ## Installation (Go modules)
 
@@ -36,7 +35,7 @@ You'll also need the [`bine`](https://github.com/cretz/bine) bindings to interfa
 go get -u github.com/cretz/bine/tor
 ```
 
-How ever to ensure a build consistency across all users of your project we recomand you using **go mod**.
+However to ensure a build consistency across all users of your project we recommend using **go mod**.
 
 ## Usage
 
