@@ -15,8 +15,7 @@ The library is currently supported on:
 
  - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
  - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
- - Macos `amd64`, `arm64`.
- - iOS `arm64`, `amd64` (simulator).
+ - Darwin (Macos and iOS) `amd64` and `arm64`.
 
 ## Installation (Go modules)
 
@@ -36,7 +35,7 @@ You'll also need the [`bine`](https://github.com/cretz/bine) bindings to interfa
 go get -u github.com/cretz/bine/tor
 ```
 
-How ever to ensure a build consistency across all users of your project we recomand you using **go mod**.
+However to ensure a build consistency across all users of your project we recommend using **go mod**.
 
 ## Usage
 
