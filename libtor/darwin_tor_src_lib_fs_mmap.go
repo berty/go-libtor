@@ -5,6 +5,10 @@
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #define BUILDDIR ""
 
 #include <../src/lib/fs/mmap.c>

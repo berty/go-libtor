@@ -6,6 +6,10 @@
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #include <../zlib/compress.c>
 */
 import "C"
