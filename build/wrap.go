@@ -272,6 +272,10 @@ var zlibTemplate = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #include <../zlib/{{.File}}.c>
 */
 import "C"
@@ -453,6 +457,10 @@ var libeventTemplate = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #include <compat/sys/queue.h>
 #include <../{{.File}}.c>
 */
@@ -683,6 +691,10 @@ var opensslTemplate = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #define DSO_NONE
 #define OPENSSLDIR "/usr/local/ssl"
 #define ENGINESDIR "/usr/local/lib/engines"
@@ -940,6 +952,10 @@ var torTemplate = `// go-libtor - Self-contained Tor from Go
 package libtor
 
 /*
+#ifdef PREFIX_GO_LIBTOR
+# pragma extern_prefix GO_LIBTOR_
+#endif
+
 #define BUILDDIR ""
 
 #include <../{{.File}}.c>
