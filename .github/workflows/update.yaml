@@ -74,7 +74,6 @@ jobs:
         openssl: [ "dyn", "sta" ]
         libevent: [ "dyn", "sta" ]
         zlib: [ "dyn", "sta" ]
-        prefix: [ "yes", "no" ]
     needs: AutoDarwin
     steps:
       - name: Set up Go 1.x
@@ -93,7 +92,6 @@ jobs:
           OPENSSL_TYPE: ${{ matrix.openssl }}
           LIBEVENT_TYPE: ${{ matrix.libevent }}
           ZLIB_TYPE: ${{ matrix.zlib }}
-          PREFIX_GO_LIBTOR: ${{ matrix.prefix }}
         run: |
           if [ "$OPENSSL_TYPE" == "dyn" ] || [ "$LIBEVENT_TYPE" == "dyn" ] || [ "$ZLIB_TYPE" == "dyn" ]; then
             sudo apt update
@@ -101,7 +99,7 @@ jobs:
           fi
           tar xf go-libtor.tar
           cd go-libtor
-          go build -v -x -tags="$(if [ "$LIBEVENT_TYPE" == "sta" ]; then echo -n "staticLibevent"; fi),$(if [ "$OPENSSL_TYPE" == "sta" ]; then echo -n "staticOpenssl"; fi),$(if [ "$ZLIB_TYPE" == "sta" ]; then echo -n "staticZlib"; fi),$(if [ "$PREFIX_GO_LIBTOR" == "yes" ]; then echo -n "prefixGoLibtor"; fi)" .
+          go build -v -x -tags="$(if [ "$LIBEVENT_TYPE" == "sta" ]; then echo -n "staticLibevent"; fi),$(if [ "$OPENSSL_TYPE" == "sta" ]; then echo -n "staticOpenssl"; fi),$(if [ "$ZLIB_TYPE" == "sta" ]; then echo -n "staticZlib"; fi)" .
   TestMacosDynamic:
     runs-on: macos-latest
     needs: AutoDarwin
@@ -126,9 +124,6 @@ jobs:
   TestMacosStatic:
     runs-on: macos-latest
     needs: AutoDarwin
-    strategy:
-      matrix:
-        prefix: [ "yes", "no" ]
     steps:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
@@ -142,12 +137,10 @@ jobs:
           path: .
 
       - name: Building
-        env:
-          PREFIX_GO_LIBTOR: ${{ matrix.prefix }}
         run: |
           tar xf go-libtor.tar
           cd go-libtor
-          go build -v -x -tags="staticOpenssl,staticZlib,staticLibevent,$(if [ "$PREFIX_GO_LIBTOR" == "yes" ]; then echo -n "prefixGoLibtor"; fi)" .
+          go build -v -x -tags="staticOpenssl,staticZlib,staticLibevent" .
   TestIOS:
     runs-on: macos-latest
     needs: AutoDarwin
