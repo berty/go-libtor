@@ -4,10 +4,6 @@ package libtor
 // This file is a simplified clone from github.com/cretz/bine/process/embedded.
 
 /*
-#ifdef PREFIX_GO_LIBTOR
-# pragma extern_prefix GO_LIBTOR_
-#endif
-
 #include <stdlib.h>
 #include <tor_api.h>
 
