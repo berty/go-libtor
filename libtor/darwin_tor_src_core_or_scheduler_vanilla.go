@@ -5,10 +5,6 @@
 package libtor
 
 /*
-#ifdef PREFIX_GO_LIBTOR
-# pragma extern_prefix GO_LIBTOR_
-#endif
-
 #define BUILDDIR ""
 
 #include <../src/core/or/scheduler_vanilla.c>

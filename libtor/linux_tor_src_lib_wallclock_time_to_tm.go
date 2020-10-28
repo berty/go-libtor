@@ -5,10 +5,6 @@
 package libtor
 
 /*
-#ifdef PREFIX_GO_LIBTOR
-# pragma extern_prefix GO_LIBTOR_
-#endif
-
 #define BUILDDIR ""
 
 #include <../src/lib/wallclock/time_to_tm.c>

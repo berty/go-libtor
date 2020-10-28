@@ -8,8 +8,6 @@ package libtor
 #cgo android,amd64 android,arm64               CFLAGS: -DARCH_ANDROID64
 #cgo android,386 android,arm                   CFLAGS: -DARCH_ANDROID32
 
-#cgo prefixGoLibtor CFLAGS: -DPREFIX_GO_LIBTOR
-
 #cgo !staticOpenssl  LDFLAGS: -lssl -lcrypto
 #cgo !staticZlib     LDFLAGS: -lz
 #cgo !staticLibevent LDFLAGS: -levent
