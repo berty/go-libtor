@@ -19,7 +19,7 @@ The library is currently supported on:
 
 ## Installation (Go modules)
 
-This library is compatible with Go modules. All you should need is to import `berty.tech/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
+This library is compatible with Go modules. All you need is to import `berty.tech/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
 
 ## Installation (GOPATH)
 
@@ -36,6 +36,22 @@ go get -u github.com/cretz/bine/tor
 ```
 
 However to ensure a build consistency across all users of your project we recommend using **go mod**.
+
+## BuildTags (Dynamicaly linked libs and Staticaly linked one)
+
+Tor is always built in but tor's deps are by default dynamicaly linked, that require the build host to have the libs and their headers installed (`libevent-dev`, `zlib1g-dev` and `libssl-dev`), the running host only requires the object files installed.
+
+There are 3 build tags to change from a dynamic to a static one, you don't need to provide anything, their sources are wrapped in `go-libtor` :
+- `staticLibevent`
+- `staticZlib`
+- `staticOpenssl`
+
+So a full static build command would be :
+```sh
+go build -v -x -tags "staticOpenssl,staticZlib,staticLibevent" .
+```
+
+But be aware that the build process is way longer in static and the resulting binary is way bigger.
 
 ## Usage
 
@@ -197,7 +213,12 @@ That's actually it! We've managed to get a Tor hidden service running from an An
 
 This repository is a fork of [ipsn/go-libtor](https://github.com/ipsn/go-libtor) originaly maintained by Péter Szilágyi ([@karalabe](https://github.com/karalabe)), but authorship of all code contained inside belongs to the individual upstream projects.
 
-We ([berty](https://berty.tech/)) have forked it because we are in crucial need of the new improvement we made (Mac OS support), but we are still hopefull about merging it back in [ipsn/go-libtor](https://github.com/ipsn/go-libtor).
+We ([berty](https://berty.tech/)) have forked it because [ipsn/go-libtor](https://github.com/ipsn/go-libtor) doesn't seems maintained anymore.
+
+We have added many new fonctionalities :
+- Uplift of the wrapping process to support a multi os / multi stage process on github action.
+- Darwin (iOS and Macos) support.
+- Dynamicaly loadded libs.
 
 ## License
 

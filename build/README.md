@@ -218,6 +218,7 @@ We ([berty](https://berty.tech/)) have forked it because [ipsn/go-libtor](https:
 We have added many new fonctionalities :
 - Uplift of the wrapping process to support a multi os / multi stage process.
 - Darwin (iOS and Macos) support.
+- Dynamicaly loaded libs.
 
 ## License
 
