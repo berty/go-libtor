@@ -5,7 +5,7 @@
 The `go-libtor` project is a self-contained, fully statically linked Tor library for Go. It consists of an elaborate suite of Go/CGO wrappers around the original C/C++ Tor library and its dependencies ([zlib](https://github.com/madler/zlib), [libevent](https://github.com/libevent/libevent) and [openssl](https://github.com/openssl/openssl)).
 
 | Library  | Version | Commit |
-|:--------:|:-------:|:------:|
+|:-:|:-:|:-:|
 | zlib | {{.zlibVer}} | [`{{.zlibHash}}`](https://github.com/madler/zlib/commit/{{.zlibHash}}) |
 | libevent | {{.libeventVer}} | [`{{.libeventHash}}`](https://github.com/libevent/libevent/commit/{{.libeventHash}}) |
 | openssl | {{.opensslVer}} | [`{{.opensslHash}}`](https://github.com/openssl/openssl/commit/{{.opensslHash}}) |
@@ -13,13 +13,13 @@ The `go-libtor` project is a self-contained, fully statically linked Tor library
 
 The library is currently supported on:
 
- - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
- - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
+ - Linux `amd64`, `x86`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
+ - Android `amd64`, `x86`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
  - Darwin (Macos and iOS) `amd64` and `arm64`.
 
 ## Installation (Go modules)
 
-This library is compatible with Go modules. All you should need is to import `berty.tech/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
+This library is compatible with Go modules. All you need is to import `berty.tech/go-libtor` and wait out the build. We suggest running `go build -v -x` the first time after adding the `go-libtor` dependency to avoid frustration, otherwise Go will build the 1000+ C files without any progress report.
 
 ## Installation (GOPATH)
 
@@ -36,6 +36,22 @@ go get -u github.com/cretz/bine/tor
 ```
 
 However to ensure a build consistency across all users of your project we recommend using **go mod**.
+
+## BuildTags (Dynamicaly linked libs and Staticaly linked one)
+
+Tor is always built in but tor's deps are by default dynamicaly linked, that require the build host to have the libs and their headers installed (`libevent-dev`, `zlib1g-dev` and `libssl-dev`) and the running host only requires the object files installed.
+
+There are 3 build tags to change from a dynamic to a static one, you don't need to provide anything, their sources are wrapped in `go-libtor` :
+- `staticLibevent`
+- `staticZlib`
+- `staticOpenssl`
+
+So a full static build command would be :
+```sh
+go build -v -x -tags "staticOpenssl,staticZlib,staticLibevent" .
+```
+
+But be aware that the build process is way longer in static and the resulting binary is way bigger (you can mitigate that by stripping it, most of the stuff is just openssl debug symbols).
 
 ## Usage
 
@@ -197,7 +213,11 @@ That's actually it! We've managed to get a Tor hidden service running from an An
 
 This repository is a fork of [ipsn/go-libtor](https://github.com/ipsn/go-libtor) originaly maintained by Péter Szilágyi ([@karalabe](https://github.com/karalabe)), but authorship of all code contained inside belongs to the individual upstream projects.
 
-We ([berty](https://berty.tech/)) have forked it because we are in crucial need of the new improvement we made (Mac OS support), but we are still hopefull about merging it back in [ipsn/go-libtor](https://github.com/ipsn/go-libtor).
+We ([berty](https://berty.tech/)) have forked it because [ipsn/go-libtor](https://github.com/ipsn/go-libtor) doesn't seems maintained anymore.
+
+We have added many new fonctionalities :
+- Uplift of the wrapping process to support a multi os / multi stage process.
+- Darwin (iOS and Macos) support.
 
 ## License
 
