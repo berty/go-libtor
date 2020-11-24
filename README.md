@@ -5,16 +5,16 @@
 The `go-libtor` project is a self-contained, fully statically linked Tor library for Go. It consists of an elaborate suite of Go/CGO wrappers around the original C/C++ Tor library and its dependencies ([zlib](https://github.com/madler/zlib), [libevent](https://github.com/libevent/libevent) and [openssl](https://github.com/openssl/openssl)).
 
 | Library  | Version | Commit |
-|:--------:|:-------:|:------:|
+|:-:|:-:|:-:|
 | zlib | 1.2.11 | [`cacf7f1d4e3d44d871b605da3b647f07d718623f`](https://github.com/madler/zlib/commit/cacf7f1d4e3d44d871b605da3b647f07d718623f) |
-| libevent | 2.2.0-alpha-dev | [`67180f8c37147dd8996c414ff0ce3233ebfaee8c`](https://github.com/libevent/libevent/commit/67180f8c37147dd8996c414ff0ce3233ebfaee8c) |
-| openssl | 1.1.1-stable | [`8979ffee95043baffa51887b1d43d9b07f9fae1b`](https://github.com/openssl/openssl/commit/8979ffee95043baffa51887b1d43d9b07f9fae1b) |
-| tor | 0.3.5.11-dev | [`55b8eedba8902610fa594b14715e4cdd3d2e925d`](https://gitweb.torproject.org/tor.git/commit/?id=55b8eedba8902610fa594b14715e4cdd3d2e925d) |
+| libevent | 2.2.0-alpha-dev | [`657e180694a97c6d70d58cd60b82e43dc23ac4b2`](https://github.com/libevent/libevent/commit/657e180694a97c6d70d58cd60b82e43dc23ac4b2) |
+| openssl | 1.1.1-stable | [`8e813c085ac43ca6a58a20f7982b26ed31dc326a`](https://github.com/openssl/openssl/commit/8e813c085ac43ca6a58a20f7982b26ed31dc326a) |
+| tor | 0.3.5.12-dev | [`6cd23b29d262da3ecd07208804804d66550a6c9a`](https://gitweb.torproject.org/tor.git/commit/?id=6cd23b29d262da3ecd07208804804d66550a6c9a) |
 
 The library is currently supported on:
 
- - Linux `amd64`, `386`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
- - Android `amd64`, `386`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
+ - Linux `amd64`, `x86`, `arm64` and `arm`; both with `libc` and `musl` (`musl` need to checked again in the CI).
+ - Android `amd64`, `x86`, `arm64` and `arm`; specifically via `gomobile` (need to be checked again in the CI).
  - Darwin (Macos and iOS) `amd64` and `arm64`.
 
 ## Installation (Go modules)
@@ -39,7 +39,7 @@ However to ensure a build consistency across all users of your project we recomm
 
 ## BuildTags (Dynamicaly linked libs and Staticaly linked one)
 
-Tor is always built in but tor's deps are by default dynamicaly linked, that require the build host to have the libs and their headers installed (`libevent-dev`, `zlib1g-dev` and `libssl-dev`), the running host only requires the object files installed.
+Tor is always built in but tor's deps are by default dynamicaly linked, that require the build host to have the libs and their headers installed (`libevent-dev`, `zlib1g-dev` and `libssl-dev`) and the running host only requires the object files installed.
 
 There are 3 build tags to change from a dynamic to a static one, you don't need to provide anything, their sources are wrapped in `go-libtor` :
 - `staticLibevent`
@@ -51,7 +51,7 @@ So a full static build command would be :
 go build -v -x -tags "staticOpenssl,staticZlib,staticLibevent" .
 ```
 
-But be aware that the build process is way longer in static and the resulting binary is way bigger.
+But be aware that the build process is way longer in static and the resulting binary is way bigger (you can mitigate that by stripping it, most of the stuff is just openssl debug symbols).
 
 ## Usage
 
@@ -216,9 +216,9 @@ This repository is a fork of [ipsn/go-libtor](https://github.com/ipsn/go-libtor)
 We ([berty](https://berty.tech/)) have forked it because [ipsn/go-libtor](https://github.com/ipsn/go-libtor) doesn't seems maintained anymore.
 
 We have added many new fonctionalities :
-- Uplift of the wrapping process to support a multi os / multi stage process on github action.
+- Uplift of the wrapping process to support a multi os / multi stage process.
 - Darwin (iOS and Macos) support.
-- Dynamicaly loadded libs.
+- Dynamicaly loaded libs.
 
 ## License
 
