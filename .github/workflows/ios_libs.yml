@@ -165,7 +165,7 @@ jobs:
                     libver="libevent-$LIBEVENT_VERSION"
                 fi
 
-                for arch in $(cd ../build/$lib && ls); do
+                for arch in $(cd "/tmp/build/$lib" && ls); do
                     tar czvf "ios-$libver-$arch.tar.gz" -C "/tmp/build/$lib/$arch" .
                 done
             done
