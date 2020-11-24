@@ -1,0 +1,216 @@
+name: iOS libraries
+on:
+  push:
+    tags:
+      - 'v*'
+  pull_request:
+    paths:
+      - 'build/VERSIONS'
+      - 'build/scripts/configure-ios.sh'
+      - 'build/scripts/openssl-build-ios'
+      - '.github/workflows/ios_libs.yml'
+
+jobs:
+  build:
+    name: Build static libs for iOS
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        archs: ['arm64', 'arm64e', 'x86_64']
+    env:
+      ARCH: ${{ matrix.archs }}
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+
+      - name: Import lib versions in env
+        run: cat build/VERSIONS >> $GITHUB_ENV
+
+      - name: Setup XCode
+        uses: maxim-lobanov/setup-xcode@v1.2.1
+        with:
+          xcode-version: '12.2'
+
+      - name: Build OpenSSL
+        run: |
+          # Setup build directory
+          mkdir -p "/tmp/build/openssl/$ARCH"
+          cp -r build/scripts/openssl-build-ios "/tmp/build/openssl/$ARCH/src"
+          cd "/tmp/build/openssl/$ARCH/src"
+
+          # Build OpenSSL
+          if [[ "$ARCH" == 'arm64' || "$ARCH" == 'arm64e' ]]; then
+              target="ios64-cross-$ARCH"
+          elif [[ "$ARCH" == 'x86_64' ]]; then
+              target="ios-sim-cross-x86_64"
+          fi
+          ./build-libssl.sh --targets="$target" --version="$OPENSSL_VERSION" --deprecated
+
+          # Cleanup
+          cd ..
+          mv src/lib src/include .
+          rm -rf src
+
+      - name: Build Zlib
+        run: |
+          # Download Zlib
+          wget "https://zlib.net/zlib-$ZLIB_VERSION.tar.gz" -O /tmp/zlib.tar.gz
+
+          # Setup build directory
+          mkdir -p "/tmp/build/zlib/$ARCH/src"
+          tar xvf /tmp/zlib.tar.gz -C "/tmp/build/zlib/$ARCH/src" --strip-components=1
+          cd "/tmp/build/zlib/$ARCH/src"
+
+          # Build Zlib
+          CFLAGS='-O3' \
+          CPPFLAGS='-O3' \
+          ${{ github.workspace }}/build/scripts/configure-ios.sh \
+            "$ARCH" \
+            --static \
+            --prefix="/tmp/build/zlib/$ARCH"
+          make -j$(sysctl hw.ncpu | awk '{print $2}') install
+
+          # Cleanup
+          cd ..
+          rm -rf src share lib/pkgconfig
+
+      - name: Build Libevent
+        run: |
+          # Download Libevent
+          wget "https://github.com/libevent/libevent/releases/download/release-$LIBEVENT_VERSION/libevent-$LIBEVENT_VERSION.tar.gz" -O /tmp/libevent.tar.gz
+
+          # Setup build directory
+          mkdir -p "/tmp/build/libevent/$ARCH/src"
+          tar xvf /tmp/libevent.tar.gz -C "/tmp/build/libevent/$ARCH/src" --strip-components=1
+          cd "/tmp/build/libevent/$ARCH/src"
+
+          # Build Libevent
+          if [[ "$ARCH" == 'arm64' || "$ARCH" == 'arm64e' ]]; then
+              host='aarch64-apple-darwin*'
+          elif [[ "$ARCH" == 'x86_64' ]]; then
+              host='x86_64-apple-darwin*'
+          fi
+          CFLAGS="-O3 -I/tmp/build/openssl/$ARCH/include" \
+          CPPFLAGS="-O3  -I/tmp/build/openssl/$ARCH/include" \
+          LDFLAGS="-L/tmp/build/openssl/$ARCH/lib" \
+          ${{ github.workspace }}/build/scripts/configure-ios.sh \
+            "$ARCH" \
+            --disable-shared \
+            --disable-samples \
+            --enable-function-sections \
+            --host="$host" \
+            --prefix="/tmp/build/libevent/$ARCH"
+          make -j$(sysctl hw.ncpu | awk '{print $2}') install
+
+          # Cleanup
+          cd ..
+          rm -rf src bin $(ls -1ad lib/* | grep -v 'libevent.a')
+
+      - name: Compress build directory
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+        run: tar czvf "libs-$ARCH.tar.gz" -C "/tmp" build
+
+      - name: Upload build archive
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: libs-${{ github.run_id }}-ios
+          path: libs-${{ matrix.archs }}.tar.gz
+
+  release:
+    name: Create release and bundle assets
+    needs: build
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+    runs-on: macos-latest
+    outputs:
+      matrix: ${{ steps.bundle_assets.outputs.matrix }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+
+      - name: Import lib versions in env
+        run: cat build/VERSIONS >> $GITHUB_ENV
+
+      - name: Download build archives
+        uses: actions/download-artifact@v2
+        with:
+          name: libs-${{ github.run_id }}-ios
+
+      - name: Decompress build archives
+        run: for archive in libs-*.tar.gz; do tar xzvf "$archive" -C /tmp; done
+
+      - name: Generate universal libs
+        working-directory: /tmp
+        run: |
+            for lib in build/*; do
+                mkdir -p $lib/universal/lib
+                cp -r $lib/{arm64,universal}/include
+                for archive in $(cd $lib/arm64/lib && ls *.a); do
+                    lipo -create $lib/{arm64,arm64e,x86_64}/lib/$archive -output $lib/universal/lib/$archive
+                done
+            done
+
+      - name: Bundle release assets
+        id: bundle_assets
+        run: |
+            mkdir release && cd release
+
+            for lib in 'openssl' 'zlib' 'libevent'; do
+                if [[ "$lib" == 'openssl' ]]; then
+                    libver="openssl-$OPENSSL_VERSION"
+                elif [[ "$lib" == 'zlib' ]]; then
+                    libver="zlib-$ZLIB_VERSION"
+                elif [[ "$lib" == 'libevent' ]]; then
+                    libver="libevent-$LIBEVENT_VERSION"
+                fi
+
+                for arch in $(cd ../build/$lib && ls); do
+                    tar czvf "ios-$libver-$arch.tar.gz" -C "/tmp/build/$lib/$arch" .
+                done
+            done
+
+            matrix='{"include":['
+            for asset in *; do
+                matrix="$matrix{\"asset\":\"$asset\"},"
+            done
+            matrix="$(echo $matrix | sed 's/.$//')]}"
+            echo "::set-output name=matrix::$matrix"
+
+      - name: Upload bundled assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: assets-${{ github.run_id }}-ios
+          path: release/*.tar.gz
+
+      - name: Create Github Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+
+  upload:
+    name: Upload release assets
+    needs: release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.release.outputs.matrix)}}
+    steps:
+      - name: Download bundled assets
+        uses: actions/download-artifact@v2
+        with:
+          name: assets-${{ github.run_id }}-ios
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ matrix.asset }}
+          asset_name: ${{ matrix.asset }}
+          asset_content_type: application/gzip
