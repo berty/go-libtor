@@ -215,7 +215,7 @@ This repository is a fork of [ipsn/go-libtor](https://github.com/ipsn/go-libtor)
 
 We ([berty](https://berty.tech/)) have forked it because [ipsn/go-libtor](https://github.com/ipsn/go-libtor) doesn't seems maintained anymore.
 
-We have added many new fonctionalities :
+We have added many new functionalities :
 - Uplift of the wrapping process to support a multi os / multi stage process.
 - Darwin (iOS and Macos) support.
 - Dynamicaly loaded libs.
