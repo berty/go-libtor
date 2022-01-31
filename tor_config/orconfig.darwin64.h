@@ -659,7 +659,11 @@
 #define PACKAGE_VERSION "0.3.5.11-dev"
 
 /* How to access the PC from a struct ucontext */
+#if defined(__arm__) || defined(__arm64__)
+#define PC_FROM_UCONTEXT uc_mcontext->__ss.__pc
+#else
 #define PC_FROM_UCONTEXT uc_mcontext->__ss.__rip
+#endif
 
 /* Define to 1 iff right-shifting a negative value performs sign-extension */
 #define RSHIFT_DOES_SIGN_EXTEND 1
